@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Storybook Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================
+       THE STORYBOOK STUDIO - Illustrated Landing Page
+       Aesthetic: Vintage Illustrated / Sepia Parchment
+       ================================================ */
+
+    :root {
+      --sepia-dark: #2a2520;
+      --sepia-mid: #4a4035;
+      --sepia-light: #8a7a65;
+      --sepia-cream: #c4b99a;
+      --sepia-paper: #e8dcc8;
+      --sage-dark: #4a6741;
+      --sage-mid: #6b8a5e;
+      --sage-light: #8fac7a;
+      --sage-pale: #b8d4a8;
+      --emerald-bright: #2d8a4e;
+      --emerald-glow: #4ade80;
+      --font-display: 'Cinzel Decorative', serif;
+      --font-body: 'Cormorant Garamond', serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: #d8cab0;
+      color: var(--sepia-cream);
+      overflow-x: hidden;
+    }
+
+    /* ================================================
+       LANDING PAGE
+       ================================================ */
+
+    .landing-page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Hero wrapper maintains aspect ratio */
+    .hero-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: calc(100vh * 1.79);
+      max-height: 100vh;
+      aspect-ratio: 2752 / 1536;
+    }
+
+    /* Hero Image Background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Film grain texture */
+    .hero-wrapper .grain-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* Invisible click area for About link (baked into image) */
+    .about-click-area {
+      position: absolute;
+      top: 2%;
+      right: 2%;
+      width: 90px;
+      height: 50px;
+      z-index: 100;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      pointer-events: auto;
+    }
+
+    .about-click-area:focus {
+      outline: 2px solid var(--sage-dark);
+      outline-offset: 2px;
+    }
+
+    /* ================================================
+       FLOATING FIREFLIES - Global
+       ================================================ */
+
+    .hero-wrapper .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow:
+        0 0 6px rgba(255, 255, 255, 0.9),
+        0 0 12px rgba(255, 255, 255, 0.6),
+        0 0 20px rgba(255, 255, 200, 0.4);
+      animation: float-particle 8s ease-in-out infinite;
+    }
+
+    @keyframes float-particle {
+      0%, 100% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) scale(0.5);
+      }
+      15% {
+        opacity: 0.9;
+      }
+      50% {
+        opacity: 0.5;
+        transform: translateY(-80px) translateX(20px) scale(1);
+      }
+      85% {
+        opacity: 0.7;
+      }
+    }
+
+    /* Swirl animation for transition */
+    .particle.swirling {
+      animation: swirl-and-fly 2.5s ease-in forwards !important;
+    }
+
+    @keyframes swirl-and-fly {
+      0% {
+        opacity: 0.9;
+        transform: rotate(0deg) translateX(0) translateY(0);
+      }
+      40% {
+        opacity: 1;
+        transform: rotate(200deg) translateX(60px) translateY(-50px);
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(500deg) translateX(0) translateY(-500px) scale(0.2);
+      }
+    }
+
+    /* Invisible click area for Enter button (baked into image) */
+    .enter-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 60px;
+      z-index: 100;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      pointer-events: auto;
+    }
+
+    .enter-btn:focus {
+      outline: 2px solid var(--sage-dark);
+      outline-offset: 4px;
+    }
+
+    /* ================================================
+       TRANSITION OVERLAY
+       ================================================ */
+
+    .transition-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      background: radial-gradient(ellipse at center, #d4c4a8 0%, #b8a888 50%, #8a7a65 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    .transition-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    .transition-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Welcome text */
+    .welcome-text {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      transition: opacity 1.2s ease 0.5s, transform 1.2s ease 0.5s;
+    }
+
+    .transition-overlay.active .welcome-text {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .welcome-line {
+      font-family: var(--font-body);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-style: italic;
+      color: var(--sepia-dark);
+      text-shadow: 0 2px 8px rgba(255,255,255,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    /* ================================================
+       STORY PAGE - Parchment Style
+       ================================================ */
+
+    .story-page {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease, visibility 1s ease;
+      overflow-y: auto;
+    }
+
+    .story-page.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Parchment background */
+    .story-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(220, 210, 190, 0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 60%, rgba(200, 190, 170, 0.4) 0%, transparent 40%),
+        linear-gradient(to bottom,
+          #d4c4a8 0%,
+          #e0d4bc 20%,
+          #e8dcc8 40%,
+          #e8dcc8 60%,
+          #e0d4bc 80%,
+          #d4c4a8 100%
+        );
+    }
+
+    /* Soft vignette */
+    .story-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      background: radial-gradient(ellipse at center,
+        transparent 0%,
+        transparent 60%,
+        rgba(138, 122, 101, 0.25) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Grain overlay for story page */
+    .story-grain {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    /* Particles on story page */
+    .story-particles {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .story-nav {
+      position: relative;
+      z-index: 10;
+      padding: 1.5rem 2rem;
+    }
+
+    .back-link {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--sepia-mid);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--sage-dark);
+    }
+
+    .story-container {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .story-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--sepia-dark);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .story-content {
+      min-height: 400px;
+    }
+
+    .story-step {
+      display: none;
+      animation: fade-in 0.8s ease;
+    }
+
+    .story-step.active {
+      display: block;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prompt-text {
+      font-size: 1.4rem;
+      color: var(--sepia-mid);
+      margin-bottom: 0.5rem;
+    }
+
+    .sub-prompt {
+      font-size: 1.7rem;
+      font-style: italic;
+      color: var(--sage-dark);
+      margin-bottom: 2.5rem;
+    }
+
+    /* Option buttons with illustrations */
+    .options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-btn {
+      width: 120px;
+      height: 130px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 2px solid var(--sepia-light);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--sepia-dark);
+      padding: 0.8rem 0.5rem;
+    }
+
+    .option-btn:hover {
+      border-color: var(--sage-mid);
+      background: rgba(255, 255, 255, 0.7);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .option-btn.selected {
+      border-color: var(--sage-dark);
+      background: rgba(184, 212, 168, 0.4);
+      box-shadow: 0 0 0 3px rgba(107, 138, 94, 0.2);
+    }
+
+    .option-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .option-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Custom input */
+    .custom-input {
+      margin-top: 1.2rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(138, 122, 101, 0.25);
+    }
+
+    .custom-input p {
+      font-style: italic;
+      color: var(--sepia-light);
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+
+    .text-input {
+      width: 100%;
+      max-width: 380px;
+      padding: 0.9rem 1.2rem;
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      color: var(--sepia-dark);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--sepia-light);
+      border-radius: 4px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .text-input:focus {
+      border-color: var(--sage-mid);
+      box-shadow: 0 0 12px rgba(107, 138, 94, 0.15);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .text-input::placeholder {
+      color: var(--sepia-light);
+    }
+
+    /* Continue button */
+    .continue-btn {
+      margin-top: 2rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--sepia-mid);
+      background: rgba(255, 255, 255, 0.4);
+      border: 2px solid var(--sepia-light);
+      padding: 0.9rem 2.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .continue-btn.enabled {
+      opacity: 1;
+      pointer-events: all;
+      color: var(--sage-dark);
+      border-color: var(--sage-mid);
+      background: rgba(184, 212, 168, 0.3);
+    }
+
+    .continue-btn.enabled:hover {
+      background: rgba(184, 212, 168, 0.5);
+      border-color: var(--sage-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Progress dots */
+    .story-progress {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 3rem;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(138, 122, 101, 0.3);
+      border: 1px solid var(--sepia-light);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.active {
+      background: var(--sage-mid);
+      border-color: var(--sage-dark);
+      box-shadow: 0 0 8px rgba(107, 138, 94, 0.3);
+    }
+
+    .progress-dot.completed {
+      background: var(--sage-dark);
+      border-color: var(--sage-dark);
+    }
+
+    /* ================================================
+       STORY COMPLETE - Storybook Style
+       ================================================ */
+
+    .story-complete {
+      padding: 1rem;
+    }
+
+    .story-complete h3 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--sage-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .storybook-frame {
+      background: linear-gradient(135deg, #faf6f0 0%, #f0e8d8 100%);
+      border: 3px solid var(--sepia-light);
+      border-radius: 4px;
+      padding: 2.5rem;
+      max-width: 650px;
+      margin: 0 auto 2rem;
+      box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        inset 0 0 60px rgba(138, 122, 101, 0.05);
+      position: relative;
+    }
+
+    .storybook-frame::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 1px solid rgba(138, 122, 101, 0.2);
+      pointer-events: none;
+    }
+
+    .story-heading {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--sage-dark);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .story-text {
+      text-align: left;
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: var(--sepia-dark);
+    }
+
+    .story-text p {
+      margin-bottom: 1.2rem;
+      text-indent: 1.5rem;
+    }
+
+    .story-text p:first-of-type {
+      text-indent: 0;
+    }
+
+    .story-text p:first-of-type::first-letter {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      float: left;
+      line-height: 1;
+      padding-right: 0.5rem;
+      color: var(--sage-dark);
+    }
+
+    .story-text p:last-child {
+      text-align: center;
+      font-style: italic;
+      color: var(--sage-dark);
+      margin-top: 1.5rem;
+      text-indent: 0;
+    }
+
+    .story-meta {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(138, 122, 101, 0.2);
+      font-size: 0.95rem;
+      color: var(--sepia-light);
+      font-style: italic;
+      text-align: center;
+    }
+
+    .story-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .start-over-btn,
+    .share-btn {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      padding: 0.8rem 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .start-over-btn {
+      color: var(--sepia-mid);
+      background: rgba(255, 255, 255, 0.5);
+      border: 2px solid var(--sepia-light);
+    }
+
+    .start-over-btn:hover {
+      background: rgba(255, 255, 255, 0.7);
+      border-color: var(--sage-mid);
+      color: var(--sage-dark);
+    }
+
+    .share-btn {
+      color: #fff;
+      background: var(--sage-mid);
+      border: 2px solid var(--sage-dark);
+    }
+
+    .share-btn:hover {
+      background: var(--sage-dark);
+    }
+
+    /* ================================================
+       ABOUT MODAL
+       ================================================ */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(42, 37, 32, 0.92);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      padding: 2rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      position: relative;
+      max-width: 550px;
+      width: 100%;
+      background: linear-gradient(135deg, #e8dcc8 0%, #d4c4a8 100%);
+      border: 2px solid var(--sepia-light);
+      padding: 2.5rem;
+      transform: translateY(20px) scale(0.95);
+      transition: transform 0.4s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--sepia-light);
+      color: var(--sepia-mid);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      border-color: var(--sepia-mid);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--sepia-dark);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.08em;
+    }
+
+    .modal-content p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--sepia-dark);
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-footer {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(138, 122, 101, 0.3);
+    }
+
+    .attribution {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--sepia-mid);
+    }
+
+    .attribution em {
+      color: var(--sage-dark);
+    }
+
+    /* ================================================
+       RESPONSIVE
+       ================================================ */
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem 1.5rem;
+      }
+
+      .site-title {
+        font-size: 1.2rem;
+      }
+
+      .leaf-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .enter-btn {
+        font-size: 0.9rem;
+        padding: 0.8rem 2rem;
+        bottom: 6%;
+      }
+
+      .option-btn {
+        width: 100px;
+        height: 110px;
+      }
+
+      .option-icon {
+        font-size: 1.8rem;
+      }
+
+      .storybook-frame {
+        padding: 1.5rem;
+      }
+
+      .story-text p:first-of-type::first-letter {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .site-title {
+        font-size: 1rem;
+        top: 0.8rem;
+      }
+
+      .enter-btn {
+        font-size: 0.85rem;
+        padding: 0.7rem 1.5rem;
+      }
+
+      .option-btn {
+        width: 85px;
+        height: 95px;
+        font-size: 0.85rem;
+      }
+
+      .option-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .particles, .story-particles, .transition-particles {
+        display: none;
+      }
+    }
+
+    .about-click-area:focus,
+    .option-btn:focus,
+    .modal-close:focus,
+    .text-input:focus,
+    .back-link:focus,
+    .continue-btn:focus,
+    .start-over-btn:focus,
+    .share-btn:focus,
+    .enter-btn:focus {
+      outline: 2px solid var(--sage-dark);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Landing Page -->
+  <div class="landing-page" id="landingPage">
+    <div class="hero-wrapper">
+      <!-- Hero Background Image -->
+      <div class="hero-bg">
+        <img src="assets/hero-illustrated.jpg" alt="An illustrated Victorian street scene with a magical green owl perched on iron gates under a full moon">
+      </div>
+      <div class="grain-overlay"></div>
+
+      <!-- Floating fireflies -->
+      <div class="particles" id="particles"></div>
+
+      <!-- Invisible click area for About (visual is in image) -->
+      <button class="about-click-area" id="aboutLink" aria-label="About"></button>
+
+      <!-- Invisible click area for Enter button (visual is in image) -->
+      <button class="enter-btn" id="enterButton" aria-label="Enter the Garden"></button>
+    </div>
+  </div>
+
+  <!-- Transition Overlay -->
+  <div class="transition-overlay" id="transitionOverlay">
+    <div class="transition-particles" id="transitionParticles"></div>
+    <div class="welcome-text">
+      <p class="welcome-line">"Let's tell your story..."</p>
+    </div>
+  </div>
+
+  <!-- Story Creation Page -->
+  <div class="story-page" id="storyPage">
+    <!-- Parchment background -->
+    <div class="story-bg"></div>
+    <div class="story-vignette"></div>
+    <div class="story-grain"></div>
+
+    <!-- Fireflies on story page -->
+    <div class="particles story-particles" id="storyParticles"></div>
+
+    <nav class="story-nav">
+      <a href="#" class="back-link" id="backLink">&larr; Back to Garden</a>
+    </nav>
+
+    <div class="story-container">
+      <h2 class="story-title">Begin Your Story</h2>
+
+      <div class="story-content" id="storyContent">
+        <!-- Step 1: Main Character -->
+        <div class="story-step active" data-step="1">
+          <p class="prompt-text">Let's start with your main character.</p>
+          <p class="sub-prompt">What's your favorite animal?</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="cat">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="60" rx="30" ry="25"/>
+                  <circle cx="50" cy="35" r="20"/>
+                  <polygon points="35,20 30,5 40,15"/>
+                  <polygon points="65,20 70,5 60,15"/>
+                  <circle cx="43" cy="32" r="3" fill="#fff"/>
+                  <circle cx="57" cy="32" r="3" fill="#fff"/>
+                  <ellipse cx="50" cy="40" rx="3" ry="2"/>
+                </svg>
+              </span>
+              <span class="option-label">Cat</span>
+            </button>
+            <button class="option-btn" data-value="bear">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="60" rx="35" ry="30"/>
+                  <circle cx="50" cy="40" r="25"/>
+                  <circle cx="25" cy="25" r="12"/>
+                  <circle cx="75" cy="25" r="12"/>
+                  <circle cx="42" cy="35" r="4" fill="#fff"/>
+                  <circle cx="58" cy="35" r="4" fill="#fff"/>
+                  <ellipse cx="50" cy="48" rx="8" ry="6" fill="#8a7a65"/>
+                </svg>
+              </span>
+              <span class="option-label">Bear</span>
+            </button>
+            <button class="option-btn" data-value="fox">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="55" rx="25" ry="20"/>
+                  <path d="M25,50 Q50,30 75,50 Q50,35 25,50"/>
+                  <polygon points="30,45 15,10 45,35"/>
+                  <polygon points="70,45 85,10 55,35"/>
+                  <circle cx="40" cy="42" r="3" fill="#fff"/>
+                  <circle cx="60" cy="42" r="3" fill="#fff"/>
+                  <ellipse cx="50" cy="52" rx="4" ry="2" fill="#2a2520"/>
+                </svg>
+              </span>
+              <span class="option-label">Fox</span>
+            </button>
+            <button class="option-btn" data-value="owl">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="60" rx="30" ry="30"/>
+                  <circle cx="50" cy="45" r="25"/>
+                  <polygon points="35,25 25,5 40,20"/>
+                  <polygon points="65,25 75,5 60,20"/>
+                  <circle cx="40" cy="42" r="12" fill="#c4b99a"/>
+                  <circle cx="60" cy="42" r="12" fill="#c4b99a"/>
+                  <circle cx="40" cy="42" r="6" fill="#2a2520"/>
+                  <circle cx="60" cy="42" r="6" fill="#2a2520"/>
+                  <polygon points="50,52 46,60 50,58 54,60"/>
+                </svg>
+              </span>
+              <span class="option-label">Owl</span>
+            </button>
+            <button class="option-btn" data-value="rabbit">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="65" rx="25" ry="22"/>
+                  <circle cx="50" cy="45" r="20"/>
+                  <ellipse cx="38" cy="15" rx="6" ry="25"/>
+                  <ellipse cx="62" cy="15" rx="6" ry="25"/>
+                  <circle cx="42" cy="42" r="3" fill="#fff"/>
+                  <circle cx="58" cy="42" r="3" fill="#fff"/>
+                  <ellipse cx="50" cy="52" rx="5" ry="3" fill="#ffb6c1"/>
+                </svg>
+              </span>
+              <span class="option-label">Rabbit</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or write in your own:</p>
+            <input type="text" class="text-input" placeholder="Your favorite animal..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="2">Continue</button>
+        </div>
+
+        <!-- Step 2: Art Style -->
+        <div class="story-step" data-step="2">
+          <p class="prompt-text">How should your story look?</p>
+          <p class="sub-prompt">Choose an art style</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="watercolor">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" opacity="0.75">
+                  <defs>
+                    <linearGradient id="wc1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#a8d8ea"/>
+                      <stop offset="50%" style="stop-color:#aa96da"/>
+                      <stop offset="100%" style="stop-color:#fcbad3"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="35" cy="40" r="25" fill="url(#wc1)" opacity="0.6"/>
+                  <circle cx="60" cy="50" r="28" fill="#a8d8ea" opacity="0.5"/>
+                  <circle cx="50" cy="65" r="22" fill="#fcbad3" opacity="0.4"/>
+                </svg>
+              </span>
+              <span class="option-label">Watercolor</span>
+            </button>
+            <button class="option-btn" data-value="pencil">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" opacity="0.75">
+                  <circle cx="50" cy="50" r="25"/>
+                  <path d="M35,60 Q50,40 65,60"/>
+                  <circle cx="40" cy="45" r="3"/>
+                  <circle cx="60" cy="45" r="3"/>
+                </svg>
+              </span>
+              <span class="option-label">Pencil Sketch</span>
+            </button>
+            <button class="option-btn" data-value="storybook">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <rect x="20" y="25" width="60" height="50" rx="3" fill="#8B4513"/>
+                  <rect x="25" y="30" width="50" height="40" fill="#faf0e6"/>
+                  <rect x="48" y="25" width="4" height="50" fill="#654321"/>
+                  <circle cx="35" cy="50" r="8" fill="#6b8a5e" opacity="0.5"/>
+                </svg>
+              </span>
+              <span class="option-label">Classic Storybook</span>
+            </button>
+            <button class="option-btn" data-value="whimsical">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <path d="M50,15 Q80,25 75,55 Q70,85 50,85 Q30,85 25,55 Q20,25 50,15" fill="#aa96da"/>
+                  <circle cx="40" cy="45" r="8" fill="#fff"/>
+                  <circle cx="60" cy="45" r="8" fill="#fff"/>
+                  <circle cx="42" cy="45" r="4" fill="#2a2520"/>
+                  <circle cx="62" cy="45" r="4" fill="#2a2520"/>
+                  <path d="M40,65 Q50,75 60,65" fill="none" stroke="#ff6b9d" stroke-width="3"/>
+                </svg>
+              </span>
+              <span class="option-label">Whimsical</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or describe your own style:</p>
+            <input type="text" class="text-input" placeholder="What style do you imagine..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="3">Continue</button>
+        </div>
+
+        <!-- Step 3: Story Type -->
+        <div class="story-step" data-step="3">
+          <p class="prompt-text">What kind of story do you want to tell?</p>
+          <p class="sub-prompt">Choose your adventure type</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="adventure">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <polygon points="50,10 60,35 90,35 65,55 75,85 50,65 25,85 35,55 10,35 40,35" fill="#d4a574"/>
+                  <circle cx="50" cy="45" r="10" fill="#2a2520"/>
+                </svg>
+              </span>
+              <span class="option-label">Adventure</span>
+            </button>
+            <button class="option-btn" data-value="mystery">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <circle cx="40" cy="45" r="25" fill="none" stroke="currentColor" stroke-width="5"/>
+                  <line x1="58" y1="63" x2="80" y2="85" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+                  <text x="33" y="52" font-size="24" fill="currentColor">?</text>
+                </svg>
+              </span>
+              <span class="option-label">Mystery</span>
+            </button>
+            <button class="option-btn" data-value="fantasy">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <path d="M50,10 L55,35 L80,35 L60,50 L70,80 L50,62 L30,80 L40,50 L20,35 L45,35 Z" fill="#9370db"/>
+                  <circle cx="50" cy="45" r="8" fill="#fff" opacity="0.8"/>
+                </svg>
+              </span>
+              <span class="option-label">Fantasy</span>
+            </button>
+            <button class="option-btn" data-value="friendship">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <path d="M50,85 C20,60 10,40 30,25 C45,15 50,30 50,30 C50,30 55,15 70,25 C90,40 80,60 50,85" fill="#d4a574"/>
+                </svg>
+              </span>
+              <span class="option-label">Friendship</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or describe your own:</p>
+            <input type="text" class="text-input" placeholder="What kind of story..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="4">Continue</button>
+        </div>
+
+        <!-- Step 4: Setting -->
+        <div class="story-step" data-step="4">
+          <p class="prompt-text">Where does your story take place?</p>
+          <p class="sub-prompt">Pick a magical setting</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="forest">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <polygon points="50,10 20,70 80,70" fill="#6b8a5e"/>
+                  <polygon points="50,25 30,65 70,65" fill="#8fac7a"/>
+                  <polygon points="35,30 15,75 55,75" fill="#4a6741"/>
+                  <rect x="45" y="70" width="10" height="15" fill="#8B4513"/>
+                </svg>
+              </span>
+              <span class="option-label">Enchanted Forest</span>
+            </button>
+            <button class="option-btn" data-value="castle">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <rect x="25" y="40" width="50" height="45" fill="#8a7a65"/>
+                  <rect x="35" y="25" width="30" height="20" fill="#8a7a65"/>
+                  <polygon points="50,5 35,25 65,25" fill="#654321"/>
+                  <rect x="20" y="30" width="10" height="55" fill="#8a7a65"/>
+                  <rect x="70" y="30" width="10" height="55" fill="#8a7a65"/>
+                  <rect x="43" y="60" width="14" height="25" fill="#2a2520"/>
+                </svg>
+              </span>
+              <span class="option-label">Ancient Castle</span>
+            </button>
+            <button class="option-btn" data-value="village">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <rect x="15" y="50" width="25" height="30" fill="#d4a574"/>
+                  <polygon points="27,35 15,50 40,50" fill="#8B4513"/>
+                  <rect x="60" y="45" width="25" height="35" fill="#c4a882"/>
+                  <polygon points="72,30 60,45 85,45" fill="#654321"/>
+                  <rect x="22" y="60" width="8" height="10" fill="#87CEEB"/>
+                  <rect x="70" y="68" width="10" height="12" fill="#2a2520"/>
+                </svg>
+              </span>
+              <span class="option-label">Cozy Village</span>
+            </button>
+            <button class="option-btn" data-value="sea">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="75" rx="45" ry="15" fill="#4682B4"/>
+                  <path d="M10,65 Q25,55 40,65 Q55,75 70,65 Q85,55 100,65" fill="none" stroke="#87CEEB" stroke-width="3"/>
+                  <circle cx="75" cy="25" r="15" fill="#d4a574" opacity="0.8"/>
+                </svg>
+              </span>
+              <span class="option-label">By the Sea</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or imagine your own place:</p>
+            <input type="text" class="text-input" placeholder="Where does it happen..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="5">Continue</button>
+        </div>
+
+        <!-- Step 5: Goal -->
+        <div class="story-step" data-step="5">
+          <p class="prompt-text">What does your character want most?</p>
+          <p class="sub-prompt">Every hero needs a goal</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="treasure">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <rect x="20" y="40" width="60" height="40" rx="5" fill="#8B4513"/>
+                  <rect x="25" y="35" width="50" height="10" fill="#654321"/>
+                  <circle cx="35" cy="60" r="8" fill="#d4a574"/>
+                  <circle cx="50" cy="55" r="6" fill="#d4a574"/>
+                  <circle cx="65" cy="62" r="7" fill="#d4a574"/>
+                </svg>
+              </span>
+              <span class="option-label">Find Treasure</span>
+            </button>
+            <button class="option-btn" data-value="friend">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <circle cx="35" cy="45" r="20" fill="#d4a574"/>
+                  <circle cx="65" cy="45" r="20" fill="#c4a882"/>
+                  <circle cx="30" cy="42" r="3" fill="#2a2520"/>
+                  <circle cx="40" cy="42" r="3" fill="#2a2520"/>
+                  <circle cx="60" cy="42" r="3" fill="#2a2520"/>
+                  <circle cx="70" cy="42" r="3" fill="#2a2520"/>
+                  <path d="M35,65 Q50,80 65,65" fill="none" stroke="#8a7a65" stroke-width="3"/>
+                </svg>
+              </span>
+              <span class="option-label">Make a Friend</span>
+            </button>
+            <button class="option-btn" data-value="home">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <polygon points="50,15 15,45 25,45 25,80 75,80 75,45 85,45" fill="#d4a574"/>
+                  <polygon points="50,15 15,45 85,45" fill="#8B4513"/>
+                  <rect x="40" y="55" width="20" height="25" fill="#654321"/>
+                  <circle cx="55" cy="68" r="2" fill="#d4a574"/>
+                  <rect x="30" y="50" width="10" height="12" fill="#87CEEB"/>
+                </svg>
+              </span>
+              <span class="option-label">Find Home</span>
+            </button>
+            <button class="option-btn" data-value="save">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <circle cx="50" cy="40" r="25" fill="#4682B4"/>
+                  <circle cx="50" cy="40" r="15" fill="#87CEEB"/>
+                  <path d="M42,38 Q50,50 58,38" fill="none" stroke="#2a2520" stroke-width="2"/>
+                  <circle cx="45" cy="35" r="2" fill="#2a2520"/>
+                  <circle cx="55" cy="35" r="2" fill="#2a2520"/>
+                  <ellipse cx="50" cy="75" rx="15" ry="10" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="option-label">Save Someone</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or write your own goal:</p>
+            <input type="text" class="text-input" placeholder="What do they want..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="6">Continue</button>
+        </div>
+
+        <!-- Step 6: Challenge/Obstacle -->
+        <div class="story-step" data-step="6">
+          <p class="prompt-text">What must they overcome?</p>
+          <p class="sub-prompt">The biggest challenge</p>
+
+          <div class="options-grid">
+            <button class="option-btn" data-value="fear">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <circle cx="50" cy="50" r="35" fill="#2a2520" opacity="0.3"/>
+                  <path d="M30,45 Q35,35 45,40 Q50,30 55,40 Q65,35 70,45 Q75,55 65,60 Q70,70 55,68 Q50,75 45,68 Q30,70 35,60 Q25,55 30,45" fill="#4a4035"/>
+                  <circle cx="42" cy="48" r="5" fill="#fff"/>
+                  <circle cx="58" cy="48" r="5" fill="#fff"/>
+                </svg>
+              </span>
+              <span class="option-label">Their Fears</span>
+            </button>
+            <button class="option-btn" data-value="villain">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <circle cx="50" cy="50" r="30" fill="#4a4035"/>
+                  <polygon points="30,35 25,15 40,30" fill="#2a2520"/>
+                  <polygon points="70,35 75,15 60,30" fill="#2a2520"/>
+                  <circle cx="40" cy="45" r="6" fill="#8a7a65"/>
+                  <circle cx="60" cy="45" r="6" fill="#8a7a65"/>
+                  <path d="M35,62 Q50,70 65,62" fill="none" stroke="#2a2520" stroke-width="3"/>
+                </svg>
+              </span>
+              <span class="option-label">A Villain</span>
+            </button>
+            <button class="option-btn" data-value="storm">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <ellipse cx="50" cy="35" rx="35" ry="20" fill="#4a4035"/>
+                  <ellipse cx="30" cy="30" rx="20" ry="15" fill="#5a5045"/>
+                  <ellipse cx="70" cy="32" rx="18" ry="14" fill="#5a5045"/>
+                  <polygon points="50,45 42,65 48,65 40,90 60,60 52,60 58,45" fill="#d4a574"/>
+                </svg>
+              </span>
+              <span class="option-label">A Storm</span>
+            </button>
+            <button class="option-btn" data-value="puzzle">
+              <span class="option-icon">
+                <svg width="36" height="36" viewBox="0 0 100 100" fill="currentColor" opacity="0.75">
+                  <path d="M25,25 L25,45 Q35,45 35,50 Q35,55 25,55 L25,75 L45,75 Q45,65 50,65 Q55,65 55,75 L75,75 L75,55 Q65,55 65,50 Q65,45 75,45 L75,25 L55,25 Q55,35 50,35 Q45,35 45,25 Z" fill="#9370db" stroke="#654321" stroke-width="2"/>
+                  <text x="42" y="55" font-size="20" fill="#fff">?</text>
+                </svg>
+              </span>
+              <span class="option-label">A Puzzle</span>
+            </button>
+          </div>
+
+          <div class="custom-input">
+            <p>Or create your own challenge:</p>
+            <input type="text" class="text-input" placeholder="What stands in their way..." data-custom="true">
+          </div>
+
+          <button class="continue-btn" data-next="complete">Create Your Story</button>
+        </div>
+
+        <!-- Story Complete - Storybook Style -->
+        <div class="story-step story-complete" data-step="complete">
+          <h3>Your Story</h3>
+
+          <div class="storybook-frame">
+            <div class="story-text" id="storySummary">
+              <!-- Filled by JS -->
+            </div>
+            <div class="story-meta" id="storyMeta"></div>
+          </div>
+
+          <div class="story-actions">
+            <button class="start-over-btn" id="startOverBtn">Tell Another Story</button>
+            <button class="share-btn" id="shareBtn">Share My Story</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-progress" id="storyProgress">
+        <div class="progress-dot active" data-step="1"></div>
+        <div class="progress-dot" data-step="2"></div>
+        <div class="progress-dot" data-step="3"></div>
+        <div class="progress-dot" data-step="4"></div>
+        <div class="progress-dot" data-step="5"></div>
+        <div class="progress-dot" data-step="6"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <h2 class="modal-title">About The Storybook Studio</h2>
+      <div class="modal-content">
+        <p>Welcome to a place where imagination takes root and stories bloom like midnight gardens.</p>
+        <p>The Storybook Studio is an interactive creative space for young storytellers. Here, you'll craft your own tales with the help of a gentle guide&mdash;not to write your story for you, but to help you discover the one already waiting inside.</p>
+        <p>Inspired by the atmospheric wonder of illustrated children's books, we believe every child has stories to tell.</p>
+        <div class="modal-footer">
+          <p class="attribution">Inspired by <em>The Night Gardener</em> by The Fan Brothers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Story state
+    const storyData = {
+      character: '',
+      style: '',
+      type: '',
+      setting: '',
+      goal: '',
+      challenge: ''
+    };
+
+    const storyKeys = ['character', 'style', 'type', 'setting', 'goal', 'challenge'];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initParticles();
+      initNavigation();
+      initEnterButton();
+      initAboutModal();
+      initStoryFlow();
+    });
+
+    /**
+     * PARTICLES - White fireflies on ALL pages
+     */
+    function initParticles() {
+      createParticlesInContainer('particles', 30);
+      createParticlesInContainer('storyParticles', 20);
+      createParticlesInContainer('transitionParticles', 25);
+    }
+
+    function createParticlesInContainer(containerId, count) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Random positioning across the full area
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${20 + Math.random() * 70}%`;
+
+        // Random animation timing
+        const delay = Math.random() * 8;
+        const duration = 6 + Math.random() * 5;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+
+        // Random size variation
+        const size = 3 + Math.random() * 4;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        container.appendChild(particle);
+      }
+    }
+
+    /**
+     * SWIRL PARTICLES - When entering the garden
+     */
+    function swirlParticles() {
+      const particles = document.querySelectorAll('#particles .particle');
+      particles.forEach((particle, i) => {
+        setTimeout(() => {
+          particle.classList.add('swirling');
+        }, i * 25);
+      });
+    }
+
+    /**
+     * NAVIGATION
+     */
+    function initNavigation() {
+      const aboutLink = document.getElementById('aboutLink');
+      if (aboutLink) {
+        aboutLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('aboutModal').classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+    }
+
+    /**
+     * ENTER BUTTON - With smooth transition
+     */
+    function initEnterButton() {
+      const btn = document.getElementById('enterButton');
+      const overlay = document.getElementById('transitionOverlay');
+      const storyPage = document.getElementById('storyPage');
+      const landingPage = document.getElementById('landingPage');
+
+      if (!btn || !overlay || !storyPage) return;
+
+      btn.addEventListener('click', () => {
+        // Trigger particle swirl
+        swirlParticles();
+
+        // Show transition overlay
+        setTimeout(() => {
+          overlay.classList.add('active');
+        }, 400);
+
+        // After welcome text displays, show story page
+        setTimeout(() => {
+          storyPage.classList.add('active');
+        }, 2200);
+
+        // Hide overlay and landing
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          landingPage.style.display = 'none';
+        }, 3000);
+      });
+    }
+
+    /**
+     * ABOUT MODAL
+     */
+    function initAboutModal() {
+      const modal = document.getElementById('aboutModal');
+      const closeBtn = document.getElementById('modalClose');
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    /**
+     * STORY FLOW
+     */
+    function initStoryFlow() {
+      const storyPage = document.getElementById('storyPage');
+      const backLink = document.getElementById('backLink');
+      const landingPage = document.getElementById('landingPage');
+      const startOverBtn = document.getElementById('startOverBtn');
+
+      // Back to landing
+      if (backLink) {
+        backLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          storyPage.classList.remove('active');
+          landingPage.style.display = '';
+          // Reset particle swirl classes
+          document.querySelectorAll('#particles .particle').forEach(p => {
+            p.classList.remove('swirling');
+          });
+          resetStory();
+        });
+      }
+
+      // Start over
+      if (startOverBtn) {
+        startOverBtn.addEventListener('click', () => {
+          resetStory();
+          goToStep(1);
+        });
+      }
+
+      // Share story
+      const shareBtn = document.getElementById('shareBtn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          const storyText = document.getElementById('storySummary').innerText;
+          const styleMeta = document.getElementById('storyMeta').innerText;
+          const fullStory = storyText + '\n\n' + styleMeta + '\n\n— Created with The Storybook Studio';
+
+          if (navigator.share) {
+            navigator.share({
+              title: 'My Storybook Story',
+              text: fullStory
+            }).catch(() => {
+              copyToClipboard(fullStory);
+            });
+          } else {
+            copyToClipboard(fullStory);
+          }
+        });
+      }
+      // Initialize all steps
+      document.querySelectorAll('.story-step').forEach(step => {
+        initStepInteractions(step);
+      });
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const shareBtn = document.getElementById('shareBtn');
+        const originalText = shareBtn.textContent;
+        shareBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          shareBtn.textContent = originalText;
+        }, 2000);
+      }).catch(() => {
+        alert('Story copied to clipboard!');
+      });
+    }
+
+    function initStepInteractions(stepEl) {
+      const optionBtns = stepEl.querySelectorAll('.option-btn');
+      const customInput = stepEl.querySelector('.text-input');
+      const continueBtn = stepEl.querySelector('.continue-btn');
+      const stepNum = parseInt(stepEl.dataset.step) || 0;
+
+      // Option button clicks
+      optionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          optionBtns.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          if (customInput) customInput.value = '';
+          if (continueBtn) continueBtn.classList.add('enabled');
+          if (stepNum > 0 && stepNum <= 6) {
+            storyData[storyKeys[stepNum - 1]] = btn.dataset.value;
+          }
+        });
+      });
+
+      // Custom input
+      if (customInput) {
+        customInput.addEventListener('input', () => {
+          if (customInput.value.trim()) {
+            optionBtns.forEach(b => b.classList.remove('selected'));
+            if (continueBtn) continueBtn.classList.add('enabled');
+            if (stepNum > 0 && stepNum <= 6) {
+              storyData[storyKeys[stepNum - 1]] = customInput.value.trim();
+            }
+          } else {
+            const hasSelection = Array.from(optionBtns).some(b => b.classList.contains('selected'));
+            if (!hasSelection && continueBtn) {
+              continueBtn.classList.remove('enabled');
+            }
+          }
+        });
+      }
+
+      // Continue button
+      if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+          if (!continueBtn.classList.contains('enabled')) return;
+
+          const nextStep = continueBtn.dataset.next;
+          if (nextStep === 'complete') {
+            showStoryComplete();
+            goToStep('complete');
+          } else {
+            goToStep(parseInt(nextStep));
+          }
+        });
+      }
+    }
+
+    function goToStep(stepNum) {
+      document.querySelectorAll('.story-step').forEach(s => {
+        s.classList.remove('active');
+      });
+
+      const targetStep = document.querySelector(`.story-step[data-step="${stepNum}"]`);
+      if (targetStep) {
+        targetStep.classList.add('active');
+      }
+
+      // Update progress dots
+      document.querySelectorAll('.progress-dot').forEach(dot => {
+        const dotStep = parseInt(dot.dataset.step);
+        dot.classList.remove('active', 'completed');
+
+        if (stepNum === 'complete') {
+          dot.classList.add('completed');
+        } else if (dotStep < stepNum) {
+          dot.classList.add('completed');
+        } else if (dotStep === stepNum) {
+          dot.classList.add('active');
+        }
+      });
+
+      // Hide progress on complete
+      const progressEl = document.getElementById('storyProgress');
+      if (progressEl) {
+        progressEl.style.display = stepNum === 'complete' ? 'none' : 'flex';
+      }
+    }
+
+    function showStoryComplete() {
+      const summary = document.getElementById('storySummary');
+      const meta = document.getElementById('storyMeta');
+      if (!summary) return;
+
+      // Get formatted values
+      const char = getCharacterInfo(storyData.character);
+      const style = getStyleInfo(storyData.style);
+      const type = getTypeInfo(storyData.type);
+      const setting = getSettingInfo(storyData.setting);
+      const goal = getGoalInfo(storyData.goal);
+      const challenge = getChallengeInfo(storyData.challenge);
+
+      // Generate a 4-5 paragraph story
+      summary.innerHTML = `
+        <p>Once upon a time, in ${setting.location}, there lived a ${char.adjective} little ${char.name} named ${char.storyName}. ${char.storyName} had soft ${char.feature} and eyes that sparkled with curiosity. Every day, ${char.pronoun} would explore the wonders around ${char.possessive} home, but deep in ${char.possessive} heart, ${char.pronoun} dreamed of something more&mdash;${char.pronoun} longed to ${goal.verb}.</p>
+
+        <p>One ${setting.timeOfDay}, while wandering through ${setting.detail}, ${char.storyName} discovered something extraordinary: ${type.discovery}. ${char.storyName}'s heart raced with excitement. This was the beginning of a ${type.adjective} ${type.name}, and ${char.pronoun} knew that nothing would ever be quite the same again.</p>
+
+        <p>But the path ahead was not easy. ${challenge.intro}, ${char.storyName} found ${char.reflexive} facing ${challenge.description}. ${challenge.detail} Many would have turned back, but ${char.storyName} remembered why ${char.pronoun} had set out on this journey in the first place. With ${char.trait} and determination, ${char.pronoun} pressed forward.</p>
+
+        <p>Through ${type.journey}, ${char.storyName} discovered something important: ${goal.lesson}. And when at last ${char.pronoun} ${goal.achievement}, ${char.pronoun} realized that the greatest treasure of all was the courage ${char.pronoun} had found within ${char.reflexive}. ${setting.ending}</p>
+
+        <p>And so ${char.storyName} returned home, forever changed by the adventure. For ${char.pronoun} had learned that even the smallest ${char.name} can have the biggest dreams&mdash;and with a brave heart, those dreams can come true.</p>
+      `;
+
+      if (meta) {
+        meta.innerHTML = `Illustrated in the style of ${style.description}`;
+      }
+    }
+
+    // Helper functions for rich story generation
+    function getCharacterInfo(value) {
+      const characters = {
+        cat: { name: 'cat', storyName: 'Whiskers', adjective: 'clever', feature: 'silver fur', pronoun: 'she', possessive: 'her', reflexive: 'herself', trait: 'quick thinking' },
+        bear: { name: 'bear', storyName: 'Bramble', adjective: 'gentle', feature: 'brown fur', pronoun: 'he', possessive: 'his', reflexive: 'himself', trait: 'quiet strength' },
+        fox: { name: 'fox', storyName: 'Russet', adjective: 'cunning', feature: 'russet fur', pronoun: 'she', possessive: 'her', reflexive: 'herself', trait: 'clever wit' },
+        owl: { name: 'owl', storyName: 'Oliver', adjective: 'wise', feature: 'speckled feathers', pronoun: 'he', possessive: 'his', reflexive: 'himself', trait: 'ancient wisdom' },
+        rabbit: { name: 'rabbit', storyName: 'Clover', adjective: 'quick', feature: 'velvet ears', pronoun: 'she', possessive: 'her', reflexive: 'herself', trait: 'boundless hope' }
+      };
+      return characters[value] || { name: value || 'creature', storyName: value || 'Little One', adjective: 'brave', feature: 'soft fur', pronoun: 'they', possessive: 'their', reflexive: 'themselves', trait: 'courage' };
+    }
+
+    function getStyleInfo(value) {
+      const styles = {
+        watercolor: { description: 'soft watercolors, with colors bleeding gently into one another like morning mist' },
+        pencil: { description: 'delicate pencil sketches, each line drawn with care and wonder' },
+        storybook: { description: 'a classic storybook, with rich colors and timeless charm' },
+        whimsical: { description: 'whimsical illustrations, full of playful details and hidden surprises' }
+      };
+      return styles[value] || { description: value || 'beautiful hand-drawn illustrations' };
+    }
+
+    function getTypeInfo(value) {
+      const types = {
+        adventure: { name: 'adventure', adjective: 'grand', discovery: 'an ancient map, its edges worn and its markings mysterious', journey: 'winding paths and hidden dangers' },
+        mystery: { name: 'mystery', adjective: 'puzzling', discovery: 'a curious riddle carved into an old stone', journey: 'clues and curious discoveries' },
+        fantasy: { name: 'tale', adjective: 'magical', discovery: 'a shimmering portal where reality seemed to bend and shimmer', journey: 'enchanted lands and impossible wonders' },
+        friendship: { name: 'journey', adjective: 'heartwarming', discovery: 'another traveler, lost and alone, in need of a friend', journey: 'shared laughter and quiet moments' }
+      };
+      return types[value] || { name: 'story', adjective: 'wonderful', discovery: 'something that would change everything', journey: 'many trials and triumphs' };
+    }
+
+    function getSettingInfo(value) {
+      const settings = {
+        forest: { location: 'a deep and ancient forest where the trees whispered secrets', timeOfDay: 'misty morning', detail: 'a grove of silver birches', ending: 'The forest seemed to bow in gratitude as a gentle breeze carried the scent of wildflowers.' },
+        castle: { location: 'the shadow of a great stone castle that touched the clouds', timeOfDay: 'golden afternoon', detail: 'the castle\'s forgotten gardens', ending: 'The castle bells rang out in celebration, their song echoing across the land.' },
+        village: { location: 'a cozy little village where everyone knew everyone', timeOfDay: 'quiet evening', detail: 'the cobblestone streets', ending: 'The villagers gathered to celebrate, and lanterns lit up the night like earthbound stars.' },
+        sea: { location: 'a windswept shore where the waves sang endless songs', timeOfDay: 'rosy dawn', detail: 'the tide pools and rocky cliffs', ending: 'The sea sparkled with a thousand lights as the sun dipped below the horizon.' }
+      };
+      return settings[value] || { location: value || 'a magical place', timeOfDay: 'special day', detail: 'the winding paths', ending: 'And peace settled over the land like a warm blanket.' };
+    }
+
+    function getGoalInfo(value) {
+      const goals = {
+        treasure: { verb: 'find the legendary treasure that everyone said was just a myth', lesson: 'the real treasure was not gold or jewels, but the friends made along the way', achievement: 'found what was sought' },
+        friend: { verb: 'find a true friend who would understand', lesson: 'friendship can bloom in the most unexpected places', achievement: 'found not one friend, but many' },
+        home: { verb: 'find the place where one truly belongs', lesson: 'home is not just a place, but a feeling carried in the heart', achievement: 'discovered what home truly meant' },
+        save: { verb: 'save someone very dear from a terrible fate', lesson: 'love gives us strength we never knew we had', achievement: 'rescued those who needed help most' }
+      };
+      return goals[value] || { verb: value || 'achieve something wonderful', lesson: 'the journey itself was the greatest teacher', achievement: 'accomplished the impossible' };
+    }
+
+    function getChallengeInfo(value) {
+      const challenges = {
+        fear: { intro: 'Deep in the darkest part of the journey', description: 'the shadows of doubt and fear that lurked within', detail: 'Every rustle seemed like danger, every silence a threat.' },
+        villain: { intro: 'Just when hope seemed within reach', description: 'a cunning adversary who sought to stop the quest', detail: 'This foe was clever and cruel, but not unbeatable.' },
+        storm: { intro: 'Without warning, the skies grew dark and', description: 'a fierce storm that raged with terrible power', detail: 'The wind howled and the rain fell in sheets, but still the brave traveler pressed on.' },
+        puzzle: { intro: 'At the heart of the mystery', description: 'an ancient puzzle that seemed impossible to solve', detail: 'Many had tried before and failed, their hopes dashed against its complexity.' }
+      };
+      return challenges[value] || { intro: 'Along the way', description: value || 'a great challenge', detail: 'It seemed impossible, but nothing is truly impossible.' };
+    }
+
+    function resetStory() {
+      storyData.character = '';
+      storyData.style = '';
+      storyData.type = '';
+      storyData.setting = '';
+      storyData.goal = '';
+      storyData.challenge = '';
+
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      document.querySelectorAll('.text-input').forEach(input => {
+        input.value = '';
+      });
+      document.querySelectorAll('.continue-btn').forEach(btn => {
+        btn.classList.remove('enabled');
+      });
+
+      goToStep(1);
+
+      const progressEl = document.getElementById('storyProgress');
+      if (progressEl) {
+        progressEl.style.display = 'flex';
+      }
+    }
+  </script>
+</body>
+</html>
